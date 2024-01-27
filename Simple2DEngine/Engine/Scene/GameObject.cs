@@ -28,6 +28,7 @@ namespace Engine2D
         }
 
         public string GetName()             { return _name;                      }
+        public string GetSceneName()        { return _scene;                     }
         public nint   GetTexture(int id)    { return _textures[id];              }
         public nint   GetCurrentTexture()   { return _textures[_currentTexture]; }
         public int    GetCurrentTextureId() { return _currentTexture;            }

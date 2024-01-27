@@ -150,39 +150,39 @@ namespace Program
 
 
   //! Physical object example
-  public class PhysicalObjectExample : Scene.PhysicalObject
-  {
-    public PhysicalObjectExample(string name, string scene) : base()
-    {
-      _name  = name;
-      _scene = scene;
-      _isShowHitbox = true;
+  // public class PhysicalObjectExample : Scene.PhysicalObject
+  // {
+  //   public PhysicalObjectExample(string name, string scene) : base()
+  //   {
+  //     _name  = name;
+  //     _scene = scene;
+  //     _isShowHitbox = true;
 
-      Window? window = GetScenesWindow(_scene);
-      if (window != null)
-      {
-        LoadTexture(SDL_GetWindowID(window.GetWindowPtr()), "../images/", "nuroPlush.png");
-      }
+  //     Window? window = GetScenesWindow(_scene);
+  //     if (window != null)
+  //     {
+  //       LoadTexture(SDL_GetWindowID(window.GetWindowPtr()), "../images/", "nuroPlush.png");
+  //     }
 
-      _textures = [ Engine.GetTexture("nuroPlush") ];
-      _textureDst = new SDL_Rect
-        {
-          x = 300,
-          y = 300,
-          w = 300,
-          h = 300
-        };
+  //     _textures = [ Engine.GetTexture("nuroPlush") ];
+  //     _textureDst = new SDL_Rect
+  //       {
+  //         x = 300,
+  //         y = 300,
+  //         w = 300,
+  //         h = 300
+  //       };
       
-      SetHitbox(new SDL_FRect 
-        {
-          x = 300,
-          y = 300,
-          w = 300,
-          h = 300
-        });
+  //     SetHitbox(new SDL_FRect 
+  //       {
+  //         x = 300,
+  //         y = 300,
+  //         w = 300,
+  //         h = 300
+  //       });
 
-    }
-  }
+  //   }
+  // }
 
 
   public class Program
@@ -191,7 +191,7 @@ namespace Program
     // private static int _angle = 0;
 
     //! Physical object example
-    public static PhysicalObjectExample physicalObjectExample = new("Player", "Main");
+    // public static PhysicalObjectExample physicalObjectExample = new("Player", "Main");
 
     public static void Setup()
     {
@@ -228,7 +228,7 @@ namespace Program
 
 
       //! Physical object example
-      AddObjectToScene("Main", physicalObjectExample);
+      // AddObjectToScene("Main", physicalObjectExample);
 
 
       AddObjectToScene("Main", new Plushy("EvilPlushy", "Main"));
@@ -301,22 +301,24 @@ namespace Program
       //   _angle = (10 + _angle) % 360;
       // }
 
-      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
-      {
-        ApplyForce(physicalObjectExample, new SDL_FPoint { x = -5, y = 0 });
-      }
-      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
-      {
-        ApplyForce(physicalObjectExample, new SDL_FPoint { x = 5, y = 0 });
-      }
-      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_W))
-      {
-        ApplyForce(physicalObjectExample, new SDL_FPoint { x = 0, y = -5 });
-      }
-      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_S))
-      {
-        ApplyForce(physicalObjectExample, new SDL_FPoint { x = 0, y = 5 }); 
-      }
+
+      //! Physical object example
+      // if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
+      // {
+      //   ApplyForce(physicalObjectExample, new SDL_FPoint { x = -5, y = 0 });
+      // }
+      // if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
+      // {
+      //   ApplyForce(physicalObjectExample, new SDL_FPoint { x = 5, y = 0 });
+      // }
+      // if (GetKey((int)SDL_Scancode.SDL_SCANCODE_W))
+      // {
+      //   ApplyForce(physicalObjectExample, new SDL_FPoint { x = 0, y = -5 });
+      // }
+      // if (GetKey((int)SDL_Scancode.SDL_SCANCODE_S))
+      // {
+      //   ApplyForce(physicalObjectExample, new SDL_FPoint { x = 0, y = 5 }); 
+      // }
 
       if (GetKey((int)SDL_Scancode.SDL_SCANCODE_UP))
       {

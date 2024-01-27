@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+	<ItemGroup>
+		<Compile Include="./SDL2/SDL2.cs" />
+		<Compile Include="./SDL2/SDL2_gfx.cs" />
+		<Compile Include="./SDL2/SDL2_image.cs" />
+		<Compile Include="./SDL2/SDL2_mixer.cs" />
+		<Compile Include="./SDL2/SDL2_ttf.cs" />
+  </ItemGroup>
+  <ItemGroup>
+		<Compile Include="./Engine/WindowManager/WindowManager.cs" />
+		<Compile Include="./Engine/WindowManager/Window.cs" />
+  </ItemGroup>
+  <ItemGroup>
+		<Compile Include="./Engine/Graphic/Graphic.cs" />
+		<Compile Include="./Engine/Graphic/DrawingMethods.cs" />
+  </ItemGroup>
+  <ItemGroup>
+		<Compile Include="./Engine/EventHandler/EventHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+		<Compile Include="./Engine/Scene/Scene.cs" />
+		<Compile Include="./Engine/Scene/GameObject.cs" />
+		<Compile Include="./Engine/Scene/PhysicalObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+		<Compile Include="./Engine/Timer/Timer.cs" />
+	</ItemGroup>
+  <ItemGroup>
+		<Compile Include="./Engine/Physic/Physic.cs" />
+	</ItemGroup>
+  <ItemGroup>
+		<Compile Include="./Engine/EngineCore.cs" />
+	</ItemGroup>
+
+</Project>

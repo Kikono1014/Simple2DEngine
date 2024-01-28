@@ -17,87 +17,87 @@ namespace Program
 
 
   //! Animated sprite example
-  public class AnimatedSpriteExample : Scene.GameObject
-  {
-    public AnimatedSpriteExample(string name, string scene)
-    {
-      _name = name;
-      _scene = scene;
-      Window? win = GetScene(_scene)?.GetWindow();
-      if (win != null)
-      {
-        LoadTextures(
-          SDL_GetWindowID(win.GetWindowPtr()),
-          "../images/sonic/", [
-                                "1.png",  "2.png",  "3.png",
-                                "4.png",  "5.png",  "6.png",
-                                "1f.png", "2f.png", "3f.png",
-                                "4f.png", "5f.png", "6f.png",
-                              ]
-        );
-      }
-      _textures = [ 
-        Engine.GetTexture("1"),  Engine.GetTexture("2"),  Engine.GetTexture("3"),  
-        Engine.GetTexture("4"),  Engine.GetTexture("5"),  Engine.GetTexture("6"),
-        Engine.GetTexture("1f"), Engine.GetTexture("2f"), Engine.GetTexture("3f"),
-        Engine.GetTexture("4f"), Engine.GetTexture("5f"), Engine.GetTexture("6f")
-      ];
+  // public class AnimatedSpriteExample : Scene.GameObject
+  // {
+  //   public AnimatedSpriteExample(string name, string scene)
+  //   {
+  //     _name = name;
+  //     _scene = scene;
+  //     Window? win = GetScene(_scene)?.GetWindow();
+  //     if (win != null)
+  //     {
+  //       LoadTextures(
+  //         SDL_GetWindowID(win.GetWindowPtr()),
+  //         "../images/sonic/", [
+  //                               "1.png",  "2.png",  "3.png",
+  //                               "4.png",  "5.png",  "6.png",
+  //                               "1f.png", "2f.png", "3f.png",
+  //                               "4f.png", "5f.png", "6f.png",
+  //                             ]
+  //       );
+  //     }
+  //     _textures = [ 
+  //       Engine.GetTexture("1"),  Engine.GetTexture("2"),  Engine.GetTexture("3"),  
+  //       Engine.GetTexture("4"),  Engine.GetTexture("5"),  Engine.GetTexture("6"),
+  //       Engine.GetTexture("1f"), Engine.GetTexture("2f"), Engine.GetTexture("3f"),
+  //       Engine.GetTexture("4f"), Engine.GetTexture("5f"), Engine.GetTexture("6f")
+  //     ];
 
-      int? windowH = GetScene(_scene)?.GetWindow()?.GetWindowH();
-      int? windowW = GetScene(_scene)?.GetWindow()?.GetWindowW();
-      if (windowH != null && windowW != null)
-      {
-        int size = 32*5;
-        _textureDst = 
-          new SDL_Rect
-          {
-            x = (int)windowW/2 - size/2,
-            y = (int)windowH - size,
-            w = size,
-            h = size
-          };
+  //     int? windowH = GetScene(_scene)?.GetWindow()?.GetWindowH();
+  //     int? windowW = GetScene(_scene)?.GetWindow()?.GetWindowW();
+  //     if (windowH != null && windowW != null)
+  //     {
+  //       int size = 32*5;
+  //       _textureDst = 
+  //         new SDL_Rect
+  //         {
+  //           x = (int)windowW/2 - size/2,
+  //           y = (int)windowH - size,
+  //           w = size,
+  //           h = size
+  //         };
 
-      }
+  //     }
       
-      AddTimer(
-        "Change" + _name + "Texture",
-        50,
-        delegate { AnimationChanger(); }
-      );
+  //     AddTimer(
+  //       "Change" + _name + "Texture",
+  //       50,
+  //       delegate { AnimationChanger(); }
+  //     );
 
     
-    }
+  //   }
     
-    public void AnimationChanger()
-    {
-      Scene.GameObject? player = GetScene(_scene)?.GetObject(_name);
-      if (player != null)
-      {
-        if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D) &&
-            !GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
-        {
-          player.SetCurrentTextureId(
-            (player.GetCurrentTextureId() + 1) % 6
-          );
-        } 
-        if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A) &&
-            !GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
-        {
-          player.SetCurrentTextureId(
-            (player.GetCurrentTextureId() + 1) % 6 + 6
-          );
-        } 
-        if (!(GetKey((int)SDL_Scancode.SDL_SCANCODE_D) ^
-              GetKey((int)SDL_Scancode.SDL_SCANCODE_A)))  // if A and D or not A and not D
-        {
-          player.SetCurrentTextureId(
-            (int)(player.GetCurrentTextureId() / 6) * 6
-          );
-        }
-      }
-    }
+  //   public void AnimationChanger()
+  //   {
+  //     Scene.GameObject? player = GetScene(_scene)?.GetObject(_name);
+  //     if (player != null)
+  //     {
+  //       if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D) &&
+  //           !GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
+  //       {
+  //         player.SetCurrentTextureId(
+  //           (player.GetCurrentTextureId() + 1) % 6
+  //         );
+  //       } 
+  //       if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A) &&
+  //           !GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
+  //       {
+  //         player.SetCurrentTextureId(
+  //           (player.GetCurrentTextureId() + 1) % 6 + 6
+  //         );
+  //       } 
+  //       if (!(GetKey((int)SDL_Scancode.SDL_SCANCODE_D) ^
+  //             GetKey((int)SDL_Scancode.SDL_SCANCODE_A)))  // if A and D or not A and not D
+  //       {
+  //         player.SetCurrentTextureId(
+  //           (int)(player.GetCurrentTextureId() / 6) * 6
+  //         );
+  //       }
+  //     }
+  //   }
   
-  }
+  // }
 
   public class Plushy : Scene.GameObject
   {
@@ -224,7 +224,7 @@ namespace Program
       Setup();
 
       //! Animated sprite example
-      GetScene("Main")?.AddObject(new AnimatedSpriteExample("Sonic", "Main"));
+      // GetScene("Main")?.AddObject(new AnimatedSpriteExample("Sonic", "Main"));
 
 
       //! Physical object example

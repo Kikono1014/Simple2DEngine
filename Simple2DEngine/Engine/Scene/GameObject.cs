@@ -38,6 +38,7 @@ namespace Engine2D
         public bool   GetIsPhysical()       { return _isPhysical;                }
 
         public void SetName            (string name)          { _name           = name;               }
+        public void SetSceneName       (string name)          { _scene           = name;               }
         public void SetTexture         (int id, nint texture) { _textures[id]   = texture;            }
         public void SetCurrentTexture  (int id, nint texture) { _textures[_currentTexture] = texture; }
         public void SetCurrentTextureId(int id)               { _currentTexture = id;                 }

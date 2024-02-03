@@ -5,6 +5,7 @@ using System;
 using WM;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Engine2D
 {
@@ -56,11 +57,12 @@ namespace Engine2D
       uint windowId,
       string path, string nameToLoad,
       int columns, int rows,
-      int width, int height)
+      int width, int height,
+      List<uint>? bgColorsToErase = null)
     {
       string format        = path[path.LastIndexOf('.') ..];
       string name          = path[(path.LastIndexOf('/') + 1) .. path.LastIndexOf('.')];
-      string directoryPath = path[.. (path.LastIndexOf('/') + 1)] + "temp/";
+      string directoryPath = path[.. (path.LastIndexOf('/') + 1)] + "tempForSplitAtlas/";
       
       Image image = Image.Load(path);
       Directory.CreateDirectory(directoryPath);
@@ -75,8 +77,35 @@ namespace Engine2D
           {
             Image clone = image.Clone(
                   p => p.Crop(new Rectangle(x * width, y * height, width, height)));
+            
+            clone.SaveAsync(directoryPath + nameToLoad + i.ToString() + format);
 
-            clone.Save(directoryPath + nameToLoad + i.ToString() + format);
+            if (bgColorsToErase != null)
+            {
+              using  Image<Rgba32> img = Image.Load<Rgba32>(directoryPath + nameToLoad + i.ToString() + format);
+              img.ProcessPixelRows(accessor =>
+              {
+                Rgba32 transparent = Color.Transparent;
+
+                for (int y = 0; y < accessor.Height; y++)
+                {
+                  Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                  for (int x = 0; x < pixelRow.Length; x++)
+                  {
+                    ref Rgba32 pixel = ref pixelRow[x];
+                    foreach (var color in bgColorsToErase)
+                    {
+                      DecodeRGBA(color, out byte r, out byte g, out byte b, out byte a);
+                      if (pixel.R == r && pixel.G == g && pixel.B == b && pixel.A == a)
+                      {
+                        pixel = transparent;
+                      }
+                    }
+                  }
+                }
+              });
+              img.SaveAsync(directoryPath + nameToLoad + i.ToString() + format);
+            }
 
             _textures[ nameToLoad + i.ToString() ] =
                 IMG_LoadTexture(

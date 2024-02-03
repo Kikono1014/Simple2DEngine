@@ -30,7 +30,8 @@ namespace Program
           SDL_GetWindowID(win.GetWindowPtr()),
           "../images/sonicAtlas.png", "sonic",
           9, 2,
-          78, 82
+          78, 82,
+          [ RGBA(76, 131, 190, 255), RGBA(132, 161, 131, 255) ]
         );
       }
       

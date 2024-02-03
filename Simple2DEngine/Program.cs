@@ -10,7 +10,6 @@ using static Engine2D.Engine.EventHandler;
 using static Engine2D.Engine.Scene.GameObject;
 using static Engine2D.Engine.Scene.PhysicalObject;
 using WM;
-using System.Runtime.CompilerServices;
 
 namespace Program
 {
@@ -26,22 +25,20 @@ namespace Program
       Window? win = GetScene(_scene)?.GetWindow();
       if (win != null)
       {
-        LoadTextures(
+        
+        Engine.LoadTexturesFromAtlas(
           SDL_GetWindowID(win.GetWindowPtr()),
-          "../images/sonic/", [
-                                "1.png",  "2.png",  "3.png",
-                                "4.png",  "5.png",  "6.png",
-                                "1f.png", "2f.png", "3f.png",
-                                "4f.png", "5f.png", "6f.png",
-                              ]
+          "../images/sonicAtlas.png", "sonic",
+          9, 2,
+          78, 82
         );
       }
-      _textures = [ 
-        Engine.GetTexture("1"),  Engine.GetTexture("2"),  Engine.GetTexture("3"),  
-        Engine.GetTexture("4"),  Engine.GetTexture("5"),  Engine.GetTexture("6"),
-        Engine.GetTexture("1f"), Engine.GetTexture("2f"), Engine.GetTexture("3f"),
-        Engine.GetTexture("4f"), Engine.GetTexture("5f"), Engine.GetTexture("6f")
-      ];
+      
+      for (int i = 0; i < 18; i++)
+      {
+        _textures.Add(Engine.GetTexture("sonic" + i.ToString()));
+      }
+      
 
       int? windowH = GetScene(_scene)?.GetWindow()?.GetWindowH();
       int? windowW = GetScene(_scene)?.GetWindow()?.GetWindowW();
@@ -224,7 +221,7 @@ namespace Program
       Setup();
 
       //! Animated sprite example
-      // GetScene("Main")?.AddObject(new AnimatedSpriteExample("Sonic", "Main"));
+      GetScene("Main")?.AddObject(new AnimatedSpriteExample("Sonic", "Main"));
 
 
       //! Physical object example

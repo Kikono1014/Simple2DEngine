@@ -16,159 +16,159 @@ namespace Program
 
 
   // ! Animated sprite example
-  public class AnimatedSpriteExample : Scene.GameObject
-  {
-    private bool _isWaiting = false;
-    public AnimatedSpriteExample(string name, string scene)
-    {
-      _name = name;
-      _scene = scene;
-      Window? win = GetScene(_scene)?.GetWindow();
-      if (win != null)
-      {
-        int textureW = 78;
-        int textureH = 82;
+  // public class AnimatedSpriteExample : Scene.GameObject
+  // {
+  //   private bool _isWaiting = false;
+  //   public AnimatedSpriteExample(string name, string scene)
+  //   {
+  //     _name = name;
+  //     _scene = scene;
+  //     Window? win = GetScene(_scene)?.GetWindow();
+  //     if (win != null)
+  //     {
+  //       int textureW = 78;
+  //       int textureH = 82;
 
-        Dictionary<string, SDL_Rect> nameAndAreaOfTexturesFromAtlas = new()
-          {
-            {"sonicStand",   new(){ x = 0,        y = 0,          w = textureW,   h = textureH } },
-            {"sonicWait",    new(){ x = textureW, y = 0,          w = textureW*8, h = textureH } },
-            {"sonicRun",     new(){ x = 0,        y = textureH,   w = textureW*8, h = textureH } },
-            {"sonicRunFast", new(){ x = 0,        y = textureH*2, w = textureW*8, h = textureH } },
-          };
+  //       Dictionary<string, SDL_Rect> nameAndAreaOfTexturesFromAtlas = new()
+  //         {
+  //           {"sonicStand",   new(){ x = 0,        y = 0,          w = textureW,   h = textureH } },
+  //           {"sonicWait",    new(){ x = textureW, y = 0,          w = textureW*8, h = textureH } },
+  //           {"sonicRun",     new(){ x = 0,        y = textureH,   w = textureW*8, h = textureH } },
+  //           {"sonicRunFast", new(){ x = 0,        y = textureH*2, w = textureW*8, h = textureH } },
+  //         };
         
-        foreach (var item in nameAndAreaOfTexturesFromAtlas)
-        {
-          Engine.LoadTexturesFromAtlas(
-            SDL_GetWindowID(win.GetWindowPtr()),
-            "../images/sonicAtlas.png", item.Key,
-            item.Value,
-            textureW, textureH,
-            [ RGBA(76, 131, 190, 255), RGBA(132, 161, 131, 255) ]
-          );
+  //       foreach (var item in nameAndAreaOfTexturesFromAtlas)
+  //       {
+  //         Engine.LoadTexturesFromAtlas(
+  //           SDL_GetWindowID(win.GetWindowPtr()),
+  //           "../images/sonicAtlas.png", item.Key,
+  //           item.Value,
+  //           textureW, textureH,
+  //           [ RGBA(76, 131, 190, 255), RGBA(132, 161, 131, 255) ]
+  //         );
           
-        }
-      }
+  //       }
+  //     }
 
-      _textures.Add(Engine.GetTexture("sonicStand0"));
+  //     _textures.Add(Engine.GetTexture("sonicStand0"));
       
-      for (int i = 0; i < 8; i++)
-      {
-        _textures.Add(Engine.GetTexture("sonicWait" + i.ToString()));
-      }
-      for (int i = 0; i < 8; i++)
-      {
-        _textures.Add(Engine.GetTexture("sonicRun" + i.ToString()));
-      }
-      for (int i = 0; i < 4; i++)
-      {
-        _textures.Add(Engine.GetTexture("sonicRunFast" + i.ToString()));
-      }
+  //     for (int i = 0; i < 8; i++)
+  //     {
+  //       _textures.Add(Engine.GetTexture("sonicWait" + i.ToString()));
+  //     }
+  //     for (int i = 0; i < 8; i++)
+  //     {
+  //       _textures.Add(Engine.GetTexture("sonicRun" + i.ToString()));
+  //     }
+  //     for (int i = 0; i < 4; i++)
+  //     {
+  //       _textures.Add(Engine.GetTexture("sonicRunFast" + i.ToString()));
+  //     }
       
 
-      int? windowH = GetScene(_scene)?.GetWindow()?.GetWindowH();
-      int? windowW = GetScene(_scene)?.GetWindow()?.GetWindowW();
+  //     int? windowH = GetScene(_scene)?.GetWindow()?.GetWindowH();
+  //     int? windowW = GetScene(_scene)?.GetWindow()?.GetWindowW();
       
-      if (windowH != null && windowW != null)
-      {
-        int size = 32*5;
-        _textureDst = 
-          new SDL_Rect
-          {
-            x = (int)windowW/2 - size/2,
-            y = (int)windowH - size,
-            w = size,
-            h = size
-          };
+  //     if (windowH != null && windowW != null)
+  //     {
+  //       int size = 32*5;
+  //       _textureDst = 
+  //         new SDL_Rect
+  //         {
+  //           x = (int)windowW/2 - size/2,
+  //           y = (int)windowH - size,
+  //           w = size,
+  //           h = size
+  //         };
 
-      }
+  //     }
       
-      AddTimer(
-        "Change" + _name + "Texture",
-        80,
-        delegate { AnimationChanger(); }
-      );
-      AddTimer(
-        "Enable" + _name + "WaitAnimation",
-        2000,
-        delegate { EnableWaitingAnimation(); }
-      );
-      AddTimer(
-        "Change" + _name + "WaitAnimation",
-        300,
-        delegate { ChangeWaitingAnimation(); }
-      );
+  //     AddTimer(
+  //       "Change" + _name + "Texture",
+  //       80,
+  //       delegate { AnimationChanger(); }
+  //     );
+  //     AddTimer(
+  //       "Enable" + _name + "WaitAnimation",
+  //       2000,
+  //       delegate { EnableWaitingAnimation(); }
+  //     );
+  //     AddTimer(
+  //       "Change" + _name + "WaitAnimation",
+  //       300,
+  //       delegate { ChangeWaitingAnimation(); }
+  //     );
 
     
-    }
+  //   }
     
-    public void AnimationChanger()
-    {
-      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D) &&
-          !GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
-      {
-        if (GetFlip() == SDL_RendererFlip.SDL_FLIP_HORIZONTAL)
-        {
-          SetFlip(SDL_RendererFlip.SDL_FLIP_NONE);
-        }
+  //   public void AnimationChanger()
+  //   {
+  //     if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D) &&
+  //         !GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
+  //     {
+  //       if (GetFlip() == SDL_RendererFlip.SDL_FLIP_HORIZONTAL)
+  //       {
+  //         SetFlip(SDL_RendererFlip.SDL_FLIP_NONE);
+  //       }
 
-        if(_isWaiting)
-        {
-          _isWaiting = false;
-          GetTimer("Start" + _name + "WaitAnimation")?.Stop();
-        }
+  //       if(_isWaiting)
+  //       {
+  //         _isWaiting = false;
+  //         GetTimer("Start" + _name + "WaitAnimation")?.Stop();
+  //       }
         
-        NextTextureInDiapason(9, 16);
-      } 
+  //       NextTextureInDiapason(9, 16);
+  //     } 
 
-      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A) &&
-          !GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
-      {
-        if (GetFlip() == SDL_RendererFlip.SDL_FLIP_NONE)
-        {
-          SetFlip(SDL_RendererFlip.SDL_FLIP_HORIZONTAL);
-        }
+  //     if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A) &&
+  //         !GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
+  //     {
+  //       if (GetFlip() == SDL_RendererFlip.SDL_FLIP_NONE)
+  //       {
+  //         SetFlip(SDL_RendererFlip.SDL_FLIP_HORIZONTAL);
+  //       }
 
-        if(_isWaiting)
-        {
-          _isWaiting = false;
-          GetTimer("Start" + _name + "WaitAnimation")?.Stop();
-        }
+  //       if(_isWaiting)
+  //       {
+  //         _isWaiting = false;
+  //         GetTimer("Start" + _name + "WaitAnimation")?.Stop();
+  //       }
 
-        NextTextureInDiapason(9, 16);
-      } 
+  //       NextTextureInDiapason(9, 16);
+  //     } 
 
-      if (!(GetKey((int)SDL_Scancode.SDL_SCANCODE_D) ^
-            GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
-            && !_isWaiting)  // if A and D or not A and not D (is standing) and is not waiting
-      {
-        SetCurrentTextureId(0);
-      }
-    }
+  //     if (!(GetKey((int)SDL_Scancode.SDL_SCANCODE_D) ^
+  //           GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
+  //           && !_isWaiting)  // if A and D or not A and not D (is standing) and is not waiting
+  //     {
+  //       SetCurrentTextureId(0);
+  //     }
+  //   }
     
-    public void EnableWaitingAnimation()
-    {
-      _isWaiting = true;
-      GetTimer("Start" + _name + "WaitAnimation")?.Stop();
-    }
+  //   public void EnableWaitingAnimation()
+  //   {
+  //     _isWaiting = true;
+  //     GetTimer("Start" + _name + "WaitAnimation")?.Stop();
+  //   }
 
 
 
-    public void ChangeWaitingAnimation()
-    {
-      if(_isWaiting)
-      {
-        NextTextureInDiapason(1, 9);
-        if(GetCurrentTextureId() == 9)
-        {
-          SetCurrentTextureId(8);
-          _isWaiting = false;
-          GetTimer("Start" + _name + "WaitAnimation")?.Start();
-        }
-      }
-    }
+  //   public void ChangeWaitingAnimation()
+  //   {
+  //     if(_isWaiting)
+  //     {
+  //       NextTextureInDiapason(1, 9);
+  //       if(GetCurrentTextureId() == 9)
+  //       {
+  //         SetCurrentTextureId(8);
+  //         _isWaiting = false;
+  //         GetTimer("Start" + _name + "WaitAnimation")?.Start();
+  //       }
+  //     }
+  //   }
   
-  }
+  // }
 
   public class Plushy : Scene.GameObject
   {
@@ -295,7 +295,7 @@ namespace Program
       Setup();
 
       //! Animated sprite example
-      GetScene("Main")?.AddObject(new AnimatedSpriteExample("Sonic", "Main"));
+      // GetScene("Main")?.AddObject(new AnimatedSpriteExample("Sonic", "Main"));
 
 
       //! Physical object example

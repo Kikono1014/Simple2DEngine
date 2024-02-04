@@ -100,7 +100,7 @@ namespace Engine2D
               SDL_RenderCopyEx( _window.GetRenderer(), obj.GetCurrentTexture(),
                                 IntPtr.Zero, ref objDst,
                                 obj.GetAngle(), IntPtr.Zero,
-                                SDL_RendererFlip.SDL_FLIP_NONE
+                                obj.GetFlip()
                               );
               
               if (obj.GetIsPhysical())

@@ -14,6 +14,7 @@ namespace Engine2D
         protected List<nint> _textures = [];
         protected SDL_Rect _textureDst;
         protected int  _angle = 0;
+        protected SDL_RendererFlip  _flip = SDL_RendererFlip.SDL_FLIP_NONE;
         protected bool _isStatic = false;
         protected bool _isShow   = true;
 
@@ -35,19 +36,21 @@ namespace Engine2D
         public int    GetCurrentTextureId() { return _currentTexture;            }
         public ref    SDL_Rect GetDst()     { return ref _textureDst;            }
         public int    GetAngle()            { return _angle;                     }
+        public SDL_RendererFlip GetFlip()   { return _flip;                      }
         public bool   GetIsStatic()         { return _isStatic;                  }
         public bool   GetIsShow()           { return _isShow;                    }
         public bool   GetIsPhysical()       { return _isPhysical;                }
 
-        public void SetName            (string name)          { _name           = name;               }
-        public void SetSceneName       (string name)          { _scene          = name;               }
-        public void SetTexture         (int id, nint texture) { _textures[id]   = texture;            }
-        public void SetCurrentTexture  (int id, nint texture) { _textures[_currentTexture] = texture; }
-        public void SetCurrentTextureId(int id)               { _currentTexture = id;                 }
-        public void SetDst             (SDL_Rect textureDst)  { _textureDst     = textureDst;         }
-        public void SetAngle           (int        angle)     { _angle          = angle;              }
-        public void SetIsStatic        (bool       isStatic)  { _isStatic       = isStatic;           }
-        public void SetIsShow          (bool       isShow)    { _isShow         = isShow;             }
+        public void SetName            (string name)           { _name           = name;               }
+        public void SetSceneName       (string name)           { _scene          = name;               }
+        public void SetTexture         (int id, nint texture)  { _textures[id]   = texture;            }
+        public void SetCurrentTexture  (int id, nint texture)  { _textures[_currentTexture] = texture; }
+        public void SetCurrentTextureId(int id)                { _currentTexture = id;                 }
+        public void SetDst             (SDL_Rect textureDst)   { _textureDst     = textureDst;         }
+        public void SetAngle           (int        angle)      { _angle          = angle;              }
+        public void SetFlip            (SDL_RendererFlip flip) { _flip           = flip;               }
+        public void SetIsStatic        (bool       isStatic)   { _isStatic       = isStatic;           }
+        public void SetIsShow          (bool       isShow)     { _isShow         = isShow;             }
 
         public int GetX() { return _textureDst.x; }
         public int GetY() { return _textureDst.y; }

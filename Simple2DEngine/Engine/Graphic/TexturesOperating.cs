@@ -56,7 +56,7 @@ namespace Engine2D
     public static void LoadTexturesFromAtlas(
       uint windowId,
       string path, string nameToLoad,
-      int columns, int rows,
+      SDL_Rect areaToOperateWith,
       int width, int height,
       List<uint>? bgColorsToErase = null)
     {
@@ -64,62 +64,90 @@ namespace Engine2D
       string name          = path[(path.LastIndexOf('/') + 1) .. path.LastIndexOf('.')];
       string directoryPath = path[.. (path.LastIndexOf('/') + 1)] + "tempForSplitAtlas/";
       
+      
+
       Image image = Image.Load(path);
+      image.Mutate(
+        p => p.Crop ( 
+                      new Rectangle
+                      (
+                        areaToOperateWith.x, areaToOperateWith.y,
+                        areaToOperateWith.w, areaToOperateWith.h
+                      )
+                    )
+                  );
+
       Directory.CreateDirectory(directoryPath);
 
       int i = 0;
 
-      for (int y = 0; y < rows; y++)
+      for (int y = 0; image.Height >= (y+1) * height; y++)
       {
-        for (int x = 0; x < columns; x++)
+        for (int x = 0; image.Width >= (x+1) * width; x++)
         {
-          if (image.Width - x * width >= width && image.Height - y * height >= height)
+          string filePath = directoryPath + nameToLoad + i.ToString() + format;
+          Image clone = image.Clone(
+                p => p.Crop(new Rectangle(x * width, y * height, width, height)));
+          
+          clone.SaveAsync(filePath);
+
+          if (bgColorsToErase != null)
           {
-            Image clone = image.Clone(
-                  p => p.Crop(new Rectangle(x * width, y * height, width, height)));
-            
-            clone.SaveAsync(directoryPath + nameToLoad + i.ToString() + format);
-
-            if (bgColorsToErase != null)
+            using  Image<Rgba32> img = Image.Load<Rgba32>(filePath);
+            img.ProcessPixelRows(accessor =>
             {
-              using  Image<Rgba32> img = Image.Load<Rgba32>(directoryPath + nameToLoad + i.ToString() + format);
-              img.ProcessPixelRows(accessor =>
-              {
-                Rgba32 transparent = Color.Transparent;
+              Rgba32 transparent = Color.Transparent;
 
-                for (int y = 0; y < accessor.Height; y++)
+              for (int y = 0; y < accessor.Height; y++)
+              {
+                Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                for (int x = 0; x < pixelRow.Length; x++)
                 {
-                  Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
-                  for (int x = 0; x < pixelRow.Length; x++)
+                  ref Rgba32 pixel = ref pixelRow[x];
+                  foreach (var color in bgColorsToErase)
                   {
-                    ref Rgba32 pixel = ref pixelRow[x];
-                    foreach (var color in bgColorsToErase)
+                    DecodeRGBA(color, out byte r, out byte g, out byte b, out byte a);
+                    if (pixel.R == r && pixel.G == g && pixel.B == b && pixel.A == a)
                     {
-                      DecodeRGBA(color, out byte r, out byte g, out byte b, out byte a);
-                      if (pixel.R == r && pixel.G == g && pixel.B == b && pixel.A == a)
-                      {
-                        pixel = transparent;
-                      }
+                      pixel = transparent;
                     }
                   }
                 }
-              });
-              img.SaveAsync(directoryPath + nameToLoad + i.ToString() + format);
-            }
-
-            _textures[ nameToLoad + i.ToString() ] =
-                IMG_LoadTexture(
-                  _windows[windowId].GetRenderer(),
-                  directoryPath + nameToLoad + i.ToString() + format
-                );
-
-            File.Delete(directoryPath + nameToLoad + i.ToString() + format);
-            i++;
+              }
+            });
+            img.SaveAsync(filePath);
           }
+
+          _textures[ nameToLoad + i.ToString() ] =
+              IMG_LoadTexture(
+                _windows[windowId].GetRenderer(),
+                filePath
+              );
+
+          File.Delete(filePath);
+          i++;
         }
       }
 
       Directory.Delete(directoryPath);
+    }
+
+    public static void LoadTexturesFromAtlas(
+      uint windowId,
+      string path, string nameToLoad,
+      int width, int height,
+      List<uint>? bgColorsToErase = null)
+    {
+      Image image = Image.Load(path);
+      LoadTexturesFromAtlas(windowId,
+                            path, nameToLoad,
+                            new SDL_Rect{
+                                          x = 0, y = 0, 
+                                          w = image.Width,
+                                          h = image.Height 
+                                        },
+                            width, height,
+                            bgColorsToErase);
     }
 
     private static void DestroyTextures()

@@ -25,24 +25,49 @@ namespace Program
       Window? win = GetScene(_scene)?.GetWindow();
       if (win != null)
       {
+        int textureW = 78;
+        int textureH = 82;
+
+        Dictionary<string, SDL_Rect> nameAndAreaOfTexturesFromAtlas = new()
+          {
+            {"sonicStand",   new(){ x = 0,        y = 0,          w = textureW,   h = textureH } },
+            {"sonicWait",    new(){ x = textureW, y = 0,          w = textureW*8, h = textureH } },
+            {"sonicRun",     new(){ x = 0,        y = textureH,   w = textureW*8, h = textureH } },
+            {"sonicRunFast", new(){ x = 0,        y = textureH*2, w = textureW*8, h = textureH } },
+          };
         
-        Engine.LoadTexturesFromAtlas(
-          SDL_GetWindowID(win.GetWindowPtr()),
-          "../images/sonicAtlas.png", "sonic",
-          9, 2,
-          78, 82,
-          [ RGBA(76, 131, 190, 255), RGBA(132, 161, 131, 255) ]
-        );
+        foreach (var item in nameAndAreaOfTexturesFromAtlas)
+        {
+          Engine.LoadTexturesFromAtlas(
+            SDL_GetWindowID(win.GetWindowPtr()),
+            "../images/sonicAtlas.png", item.Key,
+            item.Value,
+            textureW, textureH,
+            [ RGBA(76, 131, 190, 255), RGBA(132, 161, 131, 255) ]
+          );
+          
+        }
       }
+
+      _textures.Add(Engine.GetTexture("sonicStand0"));
       
-      for (int i = 0; i < 18; i++)
+      for (int i = 0; i < 8; i++)
       {
-        _textures.Add(Engine.GetTexture("sonic" + i.ToString()));
+        _textures.Add(Engine.GetTexture("sonicWait" + i.ToString()));
+      }
+      for (int i = 0; i < 8; i++)
+      {
+        _textures.Add(Engine.GetTexture("sonicRun" + i.ToString()));
+      }
+      for (int i = 0; i < 4; i++)
+      {
+        _textures.Add(Engine.GetTexture("sonicRunFast" + i.ToString()));
       }
       
 
       int? windowH = GetScene(_scene)?.GetWindow()?.GetWindowH();
       int? windowW = GetScene(_scene)?.GetWindow()?.GetWindowW();
+      
       if (windowH != null && windowW != null)
       {
         int size = 32*5;
@@ -74,24 +99,26 @@ namespace Program
         if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D) &&
             !GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
         {
+          UnpressKey(((int)SDL_Scancode.SDL_SCANCODE_D));
           player.SetCurrentTextureId(
-            (player.GetCurrentTextureId() + 1) % 6
+            (player.GetCurrentTextureId() + 1) % _textures.Count
           );
         } 
         if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A) &&
             !GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
         {
+          UnpressKey(((int)SDL_Scancode.SDL_SCANCODE_A));
           player.SetCurrentTextureId(
-            (player.GetCurrentTextureId() + 1) % 6 + 6
+            (player.GetCurrentTextureId() - 1 + _textures.Count) % _textures.Count
           );
         } 
-        if (!(GetKey((int)SDL_Scancode.SDL_SCANCODE_D) ^
-              GetKey((int)SDL_Scancode.SDL_SCANCODE_A)))  // if A and D or not A and not D
-        {
-          player.SetCurrentTextureId(
-            (int)(player.GetCurrentTextureId() / 6) * 6
-          );
-        }
+        // if (!(GetKey((int)SDL_Scancode.SDL_SCANCODE_D) ^
+        //       GetKey((int)SDL_Scancode.SDL_SCANCODE_A)))  // if A and D or not A and not D
+        // {
+        //   player.SetCurrentTextureId(
+        //     (int)(player.GetCurrentTextureId() / 6) * 6
+        //   );
+        // }
       }
     }
   
@@ -318,6 +345,7 @@ namespace Program
       //   ApplyForce(physicalObjectExample, new SDL_FPoint { x = 0, y = 5 }); 
       // }
 
+      
       if (GetKey((int)SDL_Scancode.SDL_SCANCODE_UP))
       {
         Scene? scene = GetScene("Main");

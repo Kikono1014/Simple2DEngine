@@ -69,8 +69,38 @@ namespace Engine2D
 
         public void AddAngle(int a) { _angle = (a + _angle) % 360; }
 
-        public void NextTexture()     { _currentTexture = ++_currentTexture % _textures.Count; }
-        public void PreviousTexture() { _currentTexture = (--_currentTexture + _textures.Count) % _textures.Count; }
+        public void NextTexture()
+        {
+          _currentTexture = ++_currentTexture % _textures.Count;
+        }
+        public void PreviousTexture()
+        {
+          _currentTexture = (--_currentTexture + _textures.Count) % _textures.Count;
+        }
+        public void NextTextureInDiapason(int first, int last)
+        {
+          if (last > first)
+          {
+            int amountOfTextures = last - first + 1;
+            if (_currentTexture < first || _currentTexture > last)
+            {
+              _currentTexture = first;
+            }
+            _currentTexture = (_currentTexture - first + 1) % amountOfTextures + first;
+          }
+        }
+        public void PreviousTextureInDiapason(int first, int last)
+        {
+          if (last > first)
+          {
+            if (_currentTexture < first || _currentTexture > last)
+            {
+              _currentTexture = first;
+            }
+            int amountOfTextures = last - first + 1;
+            _currentTexture = (_currentTexture - first - 1 + amountOfTextures) % amountOfTextures + first;
+          }
+        }
       }
     }
   }

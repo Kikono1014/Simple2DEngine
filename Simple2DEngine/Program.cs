@@ -18,6 +18,7 @@ namespace Program
   // ! Animated sprite example
   public class AnimatedSpriteExample : Scene.GameObject
   {
+    private bool _isWaiting = false;
     public AnimatedSpriteExample(string name, string scene)
     {
       _name = name;
@@ -84,8 +85,18 @@ namespace Program
       
       AddTimer(
         "Change" + _name + "Texture",
-        50,
+        80,
         delegate { AnimationChanger(); }
+      );
+      AddTimer(
+        "Enable" + _name + "WaitAnimation",
+        2000,
+        delegate { EnableWaitingAnimation(); }
+      );
+      AddTimer(
+        "Change" + _name + "WaitAnimation",
+        300,
+        delegate { ChangeWaitingAnimation(); }
       );
 
     
@@ -93,32 +104,67 @@ namespace Program
     
     public void AnimationChanger()
     {
-      Scene.GameObject? player = GetScene(_scene)?.GetObject(_name);
-      if (player != null)
+      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D) &&
+          !GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
       {
-        if (GetKey((int)SDL_Scancode.SDL_SCANCODE_D) &&
-            !GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
+        if (GetFlip() == SDL_RendererFlip.SDL_FLIP_HORIZONTAL)
         {
-          UnpressKey(((int)SDL_Scancode.SDL_SCANCODE_D));
-          player.SetCurrentTextureId(
-            (player.GetCurrentTextureId() + 1) % _textures.Count
-          );
-        } 
-        if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A) &&
-            !GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
+          SetFlip(SDL_RendererFlip.SDL_FLIP_NONE);
+        }
+
+        if(_isWaiting)
         {
-          UnpressKey(((int)SDL_Scancode.SDL_SCANCODE_A));
-          player.SetCurrentTextureId(
-            (player.GetCurrentTextureId() - 1 + _textures.Count) % _textures.Count
-          );
-        } 
-        // if (!(GetKey((int)SDL_Scancode.SDL_SCANCODE_D) ^
-        //       GetKey((int)SDL_Scancode.SDL_SCANCODE_A)))  // if A and D or not A and not D
-        // {
-        //   player.SetCurrentTextureId(
-        //     (int)(player.GetCurrentTextureId() / 6) * 6
-        //   );
-        // }
+          _isWaiting = false;
+          GetTimer("Start" + _name + "WaitAnimation")?.Stop();
+        }
+        
+        NextTextureInDiapason(9, 16);
+      } 
+
+      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_A) &&
+          !GetKey((int)SDL_Scancode.SDL_SCANCODE_D))
+      {
+        if (GetFlip() == SDL_RendererFlip.SDL_FLIP_NONE)
+        {
+          SetFlip(SDL_RendererFlip.SDL_FLIP_HORIZONTAL);
+        }
+
+        if(_isWaiting)
+        {
+          _isWaiting = false;
+          GetTimer("Start" + _name + "WaitAnimation")?.Stop();
+        }
+
+        NextTextureInDiapason(9, 16);
+      } 
+
+      if (!(GetKey((int)SDL_Scancode.SDL_SCANCODE_D) ^
+            GetKey((int)SDL_Scancode.SDL_SCANCODE_A))
+            && !_isWaiting)  // if A and D or not A and not D (is standing) and is not waiting
+      {
+        SetCurrentTextureId(0);
+      }
+    }
+    
+    public void EnableWaitingAnimation()
+    {
+      _isWaiting = true;
+      GetTimer("Start" + _name + "WaitAnimation")?.Stop();
+    }
+
+
+
+    public void ChangeWaitingAnimation()
+    {
+      if(_isWaiting)
+      {
+        NextTextureInDiapason(1, 9);
+        if(GetCurrentTextureId() == 9)
+        {
+          SetCurrentTextureId(8);
+          _isWaiting = false;
+          GetTimer("Start" + _name + "WaitAnimation")?.Start();
+        }
       }
     }
   

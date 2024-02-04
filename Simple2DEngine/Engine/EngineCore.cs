@@ -8,7 +8,7 @@ namespace Engine2D
 {
   public partial class Engine : WindowManager
   {
-    private static bool   _isRunning = true;
+    private static bool     _isRunning = true;
     private static readonly Dictionary<string, nint> _textures = [];
     private static readonly Dictionary<string, Scene> _scenes = [];
 

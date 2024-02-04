@@ -13,6 +13,7 @@ namespace Engine2D
         protected int _currentTexture = 0;
         protected List<nint> _textures = [];
         protected SDL_Rect _textureDst;
+        protected int  _angle = 0;
         protected bool _isStatic = false;
         protected bool _isShow   = true;
 
@@ -33,16 +34,18 @@ namespace Engine2D
         public nint   GetCurrentTexture()   { return _textures[_currentTexture]; }
         public int    GetCurrentTextureId() { return _currentTexture;            }
         public ref    SDL_Rect GetDst()     { return ref _textureDst;            }
+        public int    GetAngle()            { return _angle;                     }
         public bool   GetIsStatic()         { return _isStatic;                  }
         public bool   GetIsShow()           { return _isShow;                    }
         public bool   GetIsPhysical()       { return _isPhysical;                }
 
         public void SetName            (string name)          { _name           = name;               }
-        public void SetSceneName       (string name)          { _scene           = name;               }
+        public void SetSceneName       (string name)          { _scene          = name;               }
         public void SetTexture         (int id, nint texture) { _textures[id]   = texture;            }
         public void SetCurrentTexture  (int id, nint texture) { _textures[_currentTexture] = texture; }
         public void SetCurrentTextureId(int id)               { _currentTexture = id;                 }
         public void SetDst             (SDL_Rect textureDst)  { _textureDst     = textureDst;         }
+        public void SetAngle           (int        angle)     { _angle          = angle;              }
         public void SetIsStatic        (bool       isStatic)  { _isStatic       = isStatic;           }
         public void SetIsShow          (bool       isShow)    { _isShow         = isShow;             }
 

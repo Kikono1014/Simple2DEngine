@@ -64,6 +64,8 @@ namespace Engine2D
         public void AddW(int w) { _textureDst.w += w; }
         public void AddH(int h) { _textureDst.h += h; }
 
+        public void AddAngle(int a) { _angle = (a + _angle) % 360; }
+
         public void NextTexture()     { _currentTexture = ++_currentTexture % _textures.Count; }
         public void PreviousTexture() { _currentTexture = (--_currentTexture + _textures.Count) % _textures.Count; }
       }

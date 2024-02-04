@@ -1,5 +1,6 @@
 ﻿using static SDL2.SDL;
 using WM;
+using SixLabors.ImageSharp.ColorSpaces;
 namespace Engine2D
 {
 
@@ -95,7 +96,12 @@ namespace Engine2D
                 objDst.x -= _camCoord.x - _window.GetWindowW() / 2;
                 objDst.y -= _camCoord.y - _window.GetWindowH() / 2;
               }
-              SDL_RenderCopy(_window.GetRenderer(), obj.GetCurrentTexture(), IntPtr.Zero, ref objDst);
+              
+              SDL_RenderCopyEx( _window.GetRenderer(), obj.GetCurrentTexture(),
+                                IntPtr.Zero, ref objDst,
+                                obj.GetAngle(), IntPtr.Zero,
+                                SDL_RendererFlip.SDL_FLIP_NONE
+                              );
               
               if (obj.GetIsPhysical())
               {

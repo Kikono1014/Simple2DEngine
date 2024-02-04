@@ -321,10 +321,11 @@ namespace Program
       }
 
       //! Drawing example
-      // if (GetKey((int)SDL_Scancode.SDL_SCANCODE_SPACE))
-      // {
-      //   _angle = (10 + _angle) % 360;
-      // }
+      if (GetKey((int)SDL_Scancode.SDL_SCANCODE_SPACE))
+      {
+        // _angle = (10 + _angle) % 360;
+        GetObjectFromScene("Main", "Sonic")?.AddAngle(10);
+      }
 
 
       //! Physical object example
